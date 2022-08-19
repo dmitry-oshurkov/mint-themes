@@ -35,74 +35,7 @@ start_dir = os.getcwd()
 
 os.system("mkdir -p usr/share/themes")
 
-# Mint-X ##################################################################
 
-# First build the Gtk4 css
-os.chdir("src/Mint-X/theme/Mint-X/gtk-4.0/")
-os.system("sassc ./sass/gtk.scss gtk.css")
-os.system("sassc ./sass/gtk-dark.scss gtk-dark.css")
-os.chdir(start_dir)
-
-# Then the Gtk3 css
-os.chdir("src/Mint-X/theme/Mint-X/gtk-3.0/")
-os.system("sassc ./sass/gtk.scss gtk.css")
-os.system("sassc ./sass/gtk-dark.scss gtk-dark.css")
-os.chdir(start_dir)
-
-os.system("cp -R src/Mint-X/theme/* usr/share/themes/")
-
-# Now do the other themes and color variations
-for color in os.listdir("src/Mint-X/variations"):
-    path = os.path.join("src/Mint-X/variations", color)
-    if os.path.isdir(path):
-        theme = "usr/share/themes/Mint-X-%s" % color
-        theme_index = os.path.join(theme, "index.theme")
-        os.system("cp -R usr/share/themes/Mint-X %s" % theme)
-        os.system("cp -R src/Mint-X/variations/%s/* %s/" % (color, theme))
-
-        # Theme name
-        for key in ["Name", "GtkTheme", "IconTheme"]:
-            change_value(key, "Mint-X-%s" % color, theme_index)
-
-        # Accent color
-        gtkrc = os.path.join(theme, "gtk-2.0", "gtkrc")
-        settings_ini = os.path.join(theme, "gtk-3.0", "settings.ini")
-        gtk3_colors = os.path.join(theme, "gtk-3.0", "sass", "_colors.scss")
-        gtk4_colors = os.path.join(theme, "gtk-4.0", "sass", "_colors.scss")
-        for file in [gtkrc, settings_ini, gtk3_colors, gtk4_colors]:
-            for accent in X_HEX_ACCENTS:
-                os.system("sed -i s'/%(accent)s/%(color_accent)s/' %(file)s" % {'accent': accent, 'color_accent': x_hex_colors[color], 'file': file})
-
-        # Build sass
-        sass_dir = os.path.join(theme, "gtk-4.0")
-        os.chdir(sass_dir)
-        os.system("sassc ./sass/gtk.scss gtk.css")
-        os.system("sassc ./sass/gtk-dark.scss gtk-dark.css")
-        os.system("rm -rf sass parse-sass.sh")
-        os.chdir(start_dir)
-
-        sass_dir = os.path.join(theme, "gtk-3.0")
-        os.chdir(sass_dir)
-        os.system("sassc ./sass/gtk.scss gtk.css")
-        os.system("sassc ./sass/gtk-dark.scss gtk-dark.css")
-        os.system("rm -rf sass parse-sass.sh")
-        os.chdir(start_dir)
-
-        # Cinnamon theme name
-        file = os.path.join(theme, "cinnamon", "theme.json")
-        if os.path.exists(file):
-            os.system("sed -i s'/Mint-X/Mint-X-%(color)s/' %(file)s" % {'color': color, 'file': file})
-
-        # Cinnamon colors
-        file = os.path.join(theme, "cinnamon", "cinnamon.css")
-        if os.path.exists(file):
-            for accent in X_HEX_ACCENTS:
-                os.system("sed -i s'/%(accent)s/%(color_accent)s/' %(file)s" % {'accent': accent, 'color_accent': x_hex_colors[color], 'file': file})
-            for accent in X_RGB_ACCENTS:
-                os.system("sed -i s'/%(accent)s/%(color_accent)s/' %(file)s" % {'accent': accent, 'color_accent': x_rgb_colors[color], 'file': file})
-
-os.system("rm -rf usr/share/themes/Mint-X/gtk-3.0/sass usr/share/themes/Mint-X/gtk-3.0/parse-sass.sh")
-os.system("rm -rf usr/share/themes/Mint-X/gtk-4.0/sass usr/share/themes/Mint-X/gtk-4.0/parse-sass.sh")
 
 # Mint-Y #################################################################
 
@@ -114,8 +47,8 @@ os.chdir(curdir)
 
 # Mint-Y color variations
 for color in y_hex_colors1.keys():
-    for variant in ["", "-Dark"]:
-        original_name = "Mint-Y%s" % variant
+    for variant in ["-Dark"]:
+        original_name = "Sky-Mint-Y%s" % variant
         path = os.path.join("src/Mint-Y/variations/%s" % color)
         if os.path.isdir(path):
             print("Derivating %s-%s" % (original_name, color))

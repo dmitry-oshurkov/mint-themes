@@ -2,8 +2,7 @@
 
 import os
 
-VARIATIONS = ["Mint-Y",
-              "Mint-Y-Dark"]
+VARIATIONS = ["Mint-Y-Dark"]
 
 DEST = '../../usr/share/themes'
 
@@ -58,7 +57,7 @@ os.chdir(curdir)
 if __name__ == '__main__':
     print("Building themes")
     for variation in VARIATIONS:
-        dest_folder = os.path.join(DEST, variation)
+        dest_folder = os.path.join(DEST, "Sky-" + variation)
         os.system("mkdir -p %s" % dest_folder)
         if variation == "Mint-Y":
             print("    Building Mint-Y")
