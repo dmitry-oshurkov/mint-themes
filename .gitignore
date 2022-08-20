@@ -1,5 +1,12 @@
 src/Mint-Y/gtk-3.0/.sass-cache
 src/Mint-Y/cinnamon/sass-cache
+usr/share
+__pycache__
+
+src/Mint-Y/cinnamon/cinnamon-dark.css
+src/Mint-Y/cinnamon/cinnamon.css
+src/Mint-Y/gtk-3.0/gtk-dark.css
+src/Mint-Y/gtk-3.0/gtk.css
 
 # SASS cache files
 *.scssc
